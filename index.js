@@ -11,12 +11,22 @@ const errorMessage = document.getElementById('error-message');
 //Step1. fetching alert
 function fetchWeatherAlerts(state) {
   fetch(`${weatherApi}${state}`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch weather alerts");
+      }
+      response.json();
+    })
     .then(data => {
-      console.log(data);
+      displayAlerts(data);
+
+      input.value = "";
+
+      clearError();
+
     })
     .catch(error => {
-      console.log(error.message);
+      displayError(error.message);
     });
 }
 
